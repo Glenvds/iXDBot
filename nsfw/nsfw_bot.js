@@ -16,10 +16,10 @@ class NSFWBot {
 
     }
 
-    async executeNSFWCommand(command, message) {
+    executeNSFWCommand(command, message) {
         switch (command) {
-            case "penis": return "Jordy is gay."; break;
-            default: return await this.genNSFWUrl(command, message);
+            case "penis": this.sendMessage(message, "Jordy is gay."); break;
+            default: this.genNSFWUrl(command, message);
         }
     }
 
@@ -27,11 +27,11 @@ class NSFWBot {
         const baseObj = NSFW_BASEURLS[command][Math.floor(Math.random() * NSFW_BASEURLS[command].length)];
         let NSFWUrl = baseObj.link + this.genNum(baseObj) + baseObj.extension;
 
-        if (await this.testURL(NSFWUrl)) {return NSFWUrl; }
+        if (await this.testURL(NSFWUrl)) { this.sendMessage(message, NSFWUrl); }
         else {
             do { NSFWUrl = baseObj.link + this.genNum(baseObj) + baseObj.extension; }
-            while (!(await this.testURL(NSFWurl)))        
-            return NSFWUrl;
+            while (!(await this.testURL(NSFWurl)))
+            this.sendMessage(message, NSFWUrl);
         }
     }
 
@@ -41,6 +41,10 @@ class NSFWBot {
     };
 
     testURL = async (url) => (await fetch(url)).status === 200;
+
+    sendMessage(messageObj, string) {
+        messageObj.channel.send(string);
+    }
 }
 
 module.exports = NSFWBot;

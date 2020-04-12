@@ -20,22 +20,24 @@ const MUSIC_COMMANDS = ["play", "skip", "stop"];
 const musicChannelId = "312940674133655552";
 
 client.on("message", async message => {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(prefix)) return;
+  if (!message.author.bot && message.content.startsWith(prefix)) {
+    const args = message.content.split(" ");
+    const command = args[0].split(prefix)[1];
 
-  const args = message.content.split(" ");
-  const command = args[0].split(prefix)[1];
-
-  if (MUSIC_COMMANDS.includes(command)) {
-    if (message.channel.id !== musicChannelId) { message.channel.send("This isn't the music channel!"); }
-    else { message.channel.send(await musicBot.executeMusicCommand(command, message)); }
+    if (MUSIC_COMMANDS.includes(command)) {
+      if (message.channel.id !== musicChannelId) { message.channel.send("This isn't the music channel!"); }
+      else {
+        const voiceChannel = message.member.voice.channel;
+        if (!voiceChannel) { message.channel.send("You need to be in a voice channel to execute music commands!"); }
+        else { musicBot.executeMusicCommand(command, message); }
+      }
+    }
+    else if (NSFW_COMMANDS.includes(command)) {
+      if (!message.channel.nsfw) { message.channel.send("This isn't the NSFW channel"); }
+      else { nsfwBot.executeNSFWCommand(command, message); }
+    }
+    else { message.channel.send("Oops! I don't know that command.") }
   }
-  else if (NSFW_COMMANDS.includes(command)) {
-    if (!message.channel.nsfw) { message.channel.send("This isn't the NSFW channel"); }
-    else { message.channel.send(await nsfwBot.executeNSFWCommand(command, message)); }
-  }
-  else { message.channel.send("Oops! I don't know that command.") }
 });
-
 
 client.login(token);

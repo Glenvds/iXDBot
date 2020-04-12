@@ -10,24 +10,15 @@ class MusicBot {
 
     executeMusicCommand(command, message) {
         const serverQueue = this.queue.get(message.guild.id);
-        if(this.check(message, "You need to be in a voice channel to play music!")){
-            switch (command) {
-                case "play": this.getSong(message, serverQueue); break;
-                case "skip": this.skip(message, serverQueue); break;
-                case "stop": this.stop(message, serverQueue); break;
-            }
-        }        
-    }
-
-    check(message, errorMessage) {
-        const voiceChannel = message.member.voice.channel;
-        if (!voiceChannel) { this.sendMessage(message, errorMessage); return false; }
-        const permissions = voiceChannel.permissionsFor(message.client.user);
-        if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-            this.sendMessage(message, "I need the permissions to join and speak in your voice channel!");
-            return false;
+        switch (command) {
+            case "play": this.getSong(message, serverQueue); break;
+            case "skip":
+                if (!serverQueue) {
+                    this.sendMessageToChannel(message.channel, "There are no songs to skip!");
+                }
+                else { this.skip(serverQueue); } break;
+            case "stop": this.stop(message, serverQueue); break;
         }
-        return true;
     }
 
     async getSong(message, serverQueue) {
@@ -66,7 +57,7 @@ class MusicBot {
             try {
                 var connection = await voiceChannel.join();
                 queueContruct.connection = connection;
-                this.play(message.guild, queueContruct.songs[0], message);
+                this.play(message.guild, queueContruct.songs[0]);
             } catch (err) {
                 console.log(err);
                 this.queue.delete(message.guild.id);
@@ -74,18 +65,20 @@ class MusicBot {
         }
         else {
             serverQueue.songs.push(song);
-            this.sendMessage(message, `${song.title} has been added to the queue!`);
+            this.sendMessageToChannel(message.channel, `${song.title} has been added to the queue!`);
         }
-
     }
 
-    play(guild, song, message) {
+    play(guild, song) {
         const serverQueue = this.queue.get(guild.id);
         if (!song) {
+            this.sendMessageToChannel(serverQueue.textChannel, "Ran out of song, I'm leaving. Soai.")
             serverQueue.voiceChannel.leave();
             this.queue.delete(guild.id);
             return;
         }
+
+        this.sendMessageToChannel(serverQueue.textChannel, "Started playing: " + song.title)
 
         const dispatcher = serverQueue.connection.play(ytdl(song.url))
             .on("finish", () => {
@@ -98,18 +91,16 @@ class MusicBot {
             });
 
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-
-        return `Start playing: **${song.title}**`;
     }
 
-    skip(message, serverQueue) {
-        this.check(message, "You have to be in a voice channel to stop the music!");
-        if (!serverQueue) { this.sendMessage(message, "There is no song that I could skip!"); }
+    skip(serverQueue) {
+        //this.sendMessageToChannel(serverQueue.textChannel, "Skipping current song");
+        //console.log("SERVER QUEUE: " + JSON.stringify(serverQueue));
         serverQueue.connection.dispatcher.end();
     }
 
-    stop(message, serverQueue) {
-        this.check(message, "You have to be in a voice channel to stop the music!");
+    stop(serverQueue) {
+        this.sendMessageToChannel(serverQueue.textChannel, "Deleted my queue, I'm out.")
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end();
     }
@@ -127,8 +118,8 @@ class MusicBot {
 
     testURL = async (url) => (await fetch(url)).status === 200;
 
-    sendMessage(messageObj, string) {
-        messageObj.channel.send(string);
+    sendMessageToChannel(channel, msg) {
+        channel.send(msg);
     }
 }
 
