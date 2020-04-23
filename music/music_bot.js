@@ -1,4 +1,4 @@
-const ytdl = require("ytdl-core");
+const ytdl = require("ytdl-core-discord");
 const ytsr = require('ytsr');
 
 
@@ -69,7 +69,7 @@ class MusicBot {
         }
     }
 
-    play(guild, song) {
+    async play(guild, song) {
         const serverQueue = this.queue.get(guild.id);
         if (!song) {
             this.sendMessageToChannel(serverQueue.textChannel, "Ran out of song, I'm leaving. Soai.")
@@ -78,19 +78,23 @@ class MusicBot {
             return;
         }
 
-        this.sendMessageToChannel(serverQueue.textChannel, "Started playing: " + song.title)
+        
 
-        const dispatcher = serverQueue.connection.play(ytdl(song.url))
+        const dispatcher = serverQueue.connection.play( await ytdl(song.url), { type: 'opus', highWaterMark: 50 })
+            .on("start", () => { this.sendMessageToChannel(serverQueue.textChannel, "Started playing: " + song.title) })
             .on("finish", () => {
                 console.log(song.title + " ended playing");
                 serverQueue.songs.shift();
                 this.play(guild, serverQueue.songs[0]);
             })
+            .on("debug", debug => {
+                console.log("DEBUG: " + debug);
+            })
             .on("error", error => {
                 console.log(error);
             });
 
-        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+        //dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     }
 
     skip(serverQueue) {

@@ -6,10 +6,11 @@
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
     "discord.js": "^12.1.1",
-    "ffmpeg": "^0.0.4",
+    "ffmpeg": "0.0.4",
     "node-fetch": "^2.6.0",
+    "prism-media": "^1.2.1",
     "sqlite3": "^4.1.1",
-    "ytdl-core": "^2.0.1",
+    "ytdl-core-discord": "^1.2.0",
     "ytsr": "^0.1.12"
   },
   "devDependencies": {},
