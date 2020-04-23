@@ -19,24 +19,30 @@ const MUSIC_COMMANDS = ["play", "skip", "next", "stop"];
 //DATA IXD SERVER
 const musicChannelId = "312940674133655552";
 
+function sendResponse(channel, text) {
+  channel.send("`" + text + "`");
+};
+
 client.on("message", async message => {
   if (!message.author.bot && message.content.startsWith(prefix)) {
     const args = message.content.split(" ");
     const command = args[0].split(prefix)[1];
+    const channel = message.channel;
+
 
     if (MUSIC_COMMANDS.includes(command)) {
-      if (message.channel.id !== musicChannelId) { message.channel.send("This isn't the music channel!"); }
+      if (channel.id !== musicChannelId) { sendResponse(channel, "This isn't the music channel!"); }
       else {
         const voiceChannel = message.member.voice.channel;
-        if (!voiceChannel) { message.channel.send("You need to be in a voice channel to execute music commands!"); }
+        if (!voiceChannel) { sendResponse(channel, "You need to be in a voice channel to execute music commands!"); }
         else { musicBot.executeMusicCommand(command, message); }
       }
     }
     else if (NSFW_COMMANDS.includes(command)) {
-      if (!message.channel.nsfw) { message.channel.send("This isn't the NSFW channel"); }
+      if (!channel.nsfw) { sendResponse(channel, "This isn't the NSFW channel"); }
       else { nsfwBot.executeNSFWCommand(command, message); }
     }
-    else { message.channel.send("Oops! I don't know that command.") }
+    else { sendResponse(channel, "Oops! I don't know that command."); }
   }
 });
 

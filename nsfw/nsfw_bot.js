@@ -18,7 +18,7 @@ class NSFWBot {
 
     executeNSFWCommand(command, message) {
         switch (command) {
-            case "penis": this.sendMessage(message, "Jordy is gay."); break;
+            case "penis":  this.sendMessage(message, "Jordy is gay."); break;
             default: this.genNSFWUrl(command, message);
         }
     }
@@ -43,7 +43,7 @@ class NSFWBot {
     testURL = async (url) => (await fetch(url)).status === 200;
 
     sendMessage(messageObj, string) {
-        messageObj.channel.send(string);
+        messageObj.channel.send("`" +  string + "`");
     }
 }
 

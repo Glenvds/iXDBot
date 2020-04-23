@@ -1,8 +1,6 @@
 const ytdl = require("ytdl-core-discord");
 const ytsr = require('ytsr');
 
-
-
 class MusicBot {
     constructor() {
         this.queue = new Map();
@@ -12,11 +10,8 @@ class MusicBot {
         const serverQueue = this.queue.get(message.guild.id);
         switch (command) {
             case "play": this.getSong(message, serverQueue); break;
-            case "skip":
-                if (!serverQueue) {
-                    this.sendMessageToChannel(message.channel, "There are no songs to skip!");
-                }
-                else { this.skip(serverQueue); } break;
+            case "skip": this.skip(serverQueue); break;
+            case "next": console.log("NEXT COMMAND"); this.skip(serverQueue); break;
             case "stop": this.stop(message, serverQueue); break;
         }
     }
@@ -78,9 +73,7 @@ class MusicBot {
             return;
         }
 
-        
-
-        const dispatcher = serverQueue.connection.play( await ytdl(song.url), { type: 'opus', highWaterMark: 50 })
+        const dispatcher = serverQueue.connection.play(await ytdl(song.url), { type: 'opus', highWaterMark: 50 })
             .on("start", () => { this.sendMessageToChannel(serverQueue.textChannel, "Started playing: " + song.title) })
             .on("finish", () => {
                 console.log(song.title + " ended playing");
@@ -94,13 +87,14 @@ class MusicBot {
                 console.log(error);
             });
 
-        //dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     }
 
     skip(serverQueue) {
-        //this.sendMessageToChannel(serverQueue.textChannel, "Skipping current song");
-        //console.log("SERVER QUEUE: " + JSON.stringify(serverQueue));
-        serverQueue.connection.dispatcher.end();
+        if (!serverQueue) {
+            this.sendMessageToChannel(serverQueue.textChannel, "There are no songs to skip!");
+        }
+        else { serverQueue.connection.dispatcher.end(); }
     }
 
     stop(serverQueue) {
@@ -123,7 +117,7 @@ class MusicBot {
     testURL = async (url) => (await fetch(url)).status === 200;
 
     sendMessageToChannel(channel, msg) {
-        channel.send(msg);
+        channel.send("`" + msg + "`");
     }
 }
 
