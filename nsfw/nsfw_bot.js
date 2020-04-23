@@ -43,7 +43,7 @@ class NSFWBot {
     testURL = async (url) => (await fetch(url)).status === 200;
 
     sendMessage(messageObj, string) {
-        messageObj.channel.send("`" +  string + "`");
+        messageObj.channel.send(string);
     }
 }
 
