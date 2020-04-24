@@ -29,7 +29,6 @@ client.on("message", async message => {
     const command = args[0].split(prefix)[1];
     const channel = message.channel;
     
-
     if (MUSIC_COMMANDS.includes(command)) {
       if (channel.id !== musicChannelId) { sendResponse(channel, "This isn't the music channel!"); }
       else {

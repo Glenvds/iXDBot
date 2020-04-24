@@ -34,7 +34,7 @@ class MusicBot {
         const song = {
             title: songInfo.title,
             url: songInfo.video_url,
-            requester: message.user.username
+            requester: message.author.username
         };
 
 
