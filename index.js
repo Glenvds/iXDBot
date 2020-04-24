@@ -14,7 +14,7 @@ client.once("disconnect", () => { console.log("Disconnect!"); });
 
 //COMMANDS
 const NSFW_COMMANDS = ["boobs", "ass", "hentai", "penis"];
-const MUSIC_COMMANDS = ["play", "skip", "next", "stop"];
+const MUSIC_COMMANDS = ["play", "skip", "next", "stop", "queue"];
 
 //DATA IXD SERVER
 const musicChannelId = "312940674133655552";
@@ -28,7 +28,7 @@ client.on("message", async message => {
     const args = message.content.split(" ");
     const command = args[0].split(prefix)[1];
     const channel = message.channel;
-
+    
 
     if (MUSIC_COMMANDS.includes(command)) {
       if (channel.id !== musicChannelId) { sendResponse(channel, "This isn't the music channel!"); }

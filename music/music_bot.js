@@ -13,6 +13,7 @@ class MusicBot {
             case "skip": this.skip(serverQueue); break;
             case "next": console.log("NEXT COMMAND"); this.skip(serverQueue); break;
             case "stop": this.stop(message, serverQueue); break;
+            case "queue": this.queue(serverQueue);
         }
     }
 
@@ -32,8 +33,10 @@ class MusicBot {
         const songInfo = await ytdl.getInfo(request);
         const song = {
             title: songInfo.title,
-            url: songInfo.video_url
+            url: songInfo.video_url,
+            requester: message.user.username
         };
+
 
         if (!serverQueue) {
             const queueContruct = {
@@ -101,6 +104,15 @@ class MusicBot {
         this.sendMessageToChannel(serverQueue.textChannel, "Deleted my queue, I'm out.")
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end();
+    }
+
+    queue(serverQueue) {
+        const text = "```Current music queue:\n";
+        serverQueue.songs.forEach((song, index) => {
+            text.concat(index + ". " + song.title + "\n");
+        });
+        text.concat("```")
+        this.sendMessageToChannel(serverQueue.textChannel, text);
     }
 
     async searchYoutube(searchString) {
