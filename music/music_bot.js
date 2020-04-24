@@ -13,7 +13,7 @@ class MusicBot {
             case "skip": this.skip(serverQueue); break;
             case "next": console.log("NEXT COMMAND"); this.skip(serverQueue); break;
             case "stop": this.stop(message, serverQueue); break;
-            case "queue": this.queue(serverQueue);
+            case "queue": this.getQueue(serverQueue);
         }
     }
 
@@ -106,7 +106,7 @@ class MusicBot {
         serverQueue.connection.dispatcher.end();
     }
 
-    queue(serverQueue) {
+    getQueue(serverQueue) {
         const text = "```Current music queue:\n";
         serverQueue.songs.forEach((song, index) => {
             text.concat(index + ". " + song.title + "\n");
