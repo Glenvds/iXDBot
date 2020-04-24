@@ -8,12 +8,13 @@ class MusicBot {
 
     executeMusicCommand(command, message) {
         const serverQueue = this.queue.get(message.guild.id);
+        console.log("server: " + serverQueue);
         switch (command) {
             case "play": this.getSong(message, serverQueue); break;
             case "skip": this.skip(serverQueue); break;
             case "next": console.log("NEXT COMMAND"); this.skip(serverQueue); break;
             case "stop": this.stop(message, serverQueue); break;
-            case "queue": this.getQueue(serverQueue);
+            case "queue": console.log("begin: " + serverQueue); this.getQueue(serverQueue); break;
         }
     }
 
@@ -108,7 +109,8 @@ class MusicBot {
 
     getQueue(serverQueue) {
         const text = "```Current music queue:\n";
-        console.log("SONGS: " + songs);
+        //console.log("queue: " + JSON.stringify(serverQueue));
+        //console.log("SONGS: " + songs);
         serverQueue.songs.forEach((song, index) => {
             text.concat(index + ". " + song.title + "\n");
         });

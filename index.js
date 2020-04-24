@@ -14,7 +14,7 @@ client.once("disconnect", () => { console.log("Disconnect!"); });
 
 //COMMANDS
 const NSFW_COMMANDS = ["boobs", "ass", "hentai", "penis"];
-const MUSIC_COMMANDS = ["play", "skip", "next", "stop", "queue"];
+const MUSIC_COMMANDS = ["play", "skip", "next", "stop"];
 
 //DATA IXD SERVER
 const musicChannelId = "312940674133655552";
