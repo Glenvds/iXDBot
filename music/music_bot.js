@@ -108,10 +108,11 @@ class MusicBot {
 
     getQueue(serverQueue) {
         const text = "```Current music queue:\n";
+        console.log("SONGS: " + songs);
         serverQueue.songs.forEach((song, index) => {
             text.concat(index + ". " + song.title + "\n");
         });
-        text.concat("```")
+        text.concat("```");
         this.sendMessageToChannel(serverQueue.textChannel, text);
     }
 
