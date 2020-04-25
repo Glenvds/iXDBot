@@ -107,15 +107,15 @@ class MusicBot {
         serverQueue.connection.dispatcher.end();
     }
 
-    getQueue(serverQueue) {
+    getQueue(serverQueue) {        
         const text = "```Current music queue:\n";
         //console.log("queue: " + JSON.stringify(serverQueue));
         //console.log("SONGS: " + songs);
         serverQueue.songs.forEach((song, index) => {
-            text.concat(index + ". " + song.title + "\n");
+            text = text.concat(index + ". " + song.title + "\n");
         });
-        text.concat("```");
-        this.sendMessageToChannel(serverQueue.textChannel, text);
+        text = text.concat("```");
+        serverQueue.textChannel.send(text);
     }
 
     async searchYoutube(searchString) {
