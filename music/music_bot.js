@@ -1,5 +1,6 @@
 const ytdl = require("ytdl-core-discord");
 const ytsr = require('ytsr');
+const radio = require('radio-stream');
 
 class MusicBot {
     constructor() {
@@ -14,6 +15,7 @@ class MusicBot {
             case "next": console.log("NEXT COMMAND"); this.skip(serverQueue); break;
             case "stop": this.stop(message, serverQueue); break;
             case "queue": this.getQueue(serverQueue); break;
+            case "radio": this.playRadio(message); break;
         }
     }
 
@@ -107,12 +109,12 @@ class MusicBot {
     }
 
     getQueue(serverQueue) {
-        let text = "```--- Current music queue ---\n\n";
+        let text = "```--- Music queue ---\n\n";
         serverQueue.songs.forEach((song, index) => {
             if (index === 0) {
-                text = text.concat("Now playing: " + song.title + " Requested by: " + song.requester + "\n\n");
+                text = text.concat("Now playing: " + song.title + " | Requested by: " + song.requester + "\n\n");
             } else {
-                text = text.concat(index + ". " + song.title + " Requested by: " + song.requester + "\n");
+                text = text.concat(index + ". " + song.title + " | Requested by: @" + song.requester + "\n");
             }
         });
         text = text.concat("```");
@@ -135,6 +137,44 @@ class MusicBot {
     sendMessageToChannel(channel, msg) {
         channel.send("`" + msg + "`");
     }
+
+
+    async playRadio(message){
+        const voiceChannel = message.member.voice.channel;     
+        const textChannel = message.channel;   
+        const stream = radio.createRadioStream("http://icecast.vrtcdn.be/stubru-high.mp3");
+
+        try{
+            const connection = await voiceChannel.join();
+        } catch(err){
+            console.log("ERROR IN PLAYRADIO: " + err)
+        }
+
+        
+        stream.on("connect", () => {
+            console.log("Radio stream connected!");
+            console.log(stream.headers);
+        });
+
+        stream.on("data", (chunck) => {
+
+            const dispatcher = connection.play(chunck)
+            .on("start", () => {this;this.sendMessageToChannel(textChannel, "Started playing radio");})
+            .on("finish", () => {
+                console.log("ended radio")
+            })
+            .on("debug", debug => {
+                console.log("DEBUG: " + debug);
+            })
+            .on("error", error => {
+                console.log(error);
+            });
+        })
+    }
+
+
+
+
 }
 
 

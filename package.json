@@ -9,6 +9,7 @@
     "ffmpeg": "0.0.4",
     "node-fetch": "^2.6.0",
     "prism-media": "^1.2.1",
+    "radio-stream": "0.0.1",
     "sqlite3": "^4.1.1",
     "ytdl-core": "^2.1.0",
     "ytdl-core-discord": "^1.2.0",
