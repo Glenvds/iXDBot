@@ -108,7 +108,7 @@ class MusicBot {
     }
 
     getQueue(serverQueue) {        
-        const text = "```Current music queue:\n";
+        let text = "```Current music queue:\n";
         //console.log("queue: " + JSON.stringify(serverQueue));
         //console.log("SONGS: " + songs);
         serverQueue.songs.forEach((song, index) => {
