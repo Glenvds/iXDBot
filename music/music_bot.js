@@ -108,10 +108,13 @@ class MusicBot {
     }
 
     getQueue(serverQueue) {        
-        let text = "```Current music queue:\n";
+        let text = "```--- Current music queue\n ---";
         //console.log("queue: " + JSON.stringify(serverQueue));
         //console.log("SONGS: " + songs);
         serverQueue.songs.forEach((song, index) => {
+            if(index === 0){
+                text = text.concat("Currently playing: " + song.title);
+            }
             text = text.concat(index + ". " + song.title + "\n");
         });
         text = text.concat("```");
