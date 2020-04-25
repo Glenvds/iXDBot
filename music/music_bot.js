@@ -113,7 +113,7 @@ class MusicBot {
         //console.log("SONGS: " + songs);
         serverQueue.songs.forEach((song, index) => {
             if(index === 0){
-                text = text.concat("Currently playing: " + song.title);
+                text = text.concat("Currently playing: " + song.title + "\n");
             }
             text = text.concat(index + ". " + song.title + "\n");
         });
