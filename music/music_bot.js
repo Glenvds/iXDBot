@@ -106,13 +106,13 @@ class MusicBot {
         serverQueue.connection.dispatcher.end();
     }
 
-    getQueue(serverQueue) {        
-        let text = "```--- Current music queue ---\n";
+    getQueue(serverQueue) {
+        let text = "```--- Current music queue ---\n\n";
         serverQueue.songs.forEach((song, index) => {
-            if(index === 0){
-                text = text.concat("Currently playing: " + song.title + "\n");
+            if (index === 0) {
+                text = text.concat("Now playing: " + song.title + " Requested by: " + song.requester + "\n\n");
             } else {
-                text = text.concat(index + ". " + song.title + "\n");
+                text = text.concat(index + ". " + song.title + " Requested by: " + song.requester + "\n");
             }
         });
         text = text.concat("```");
