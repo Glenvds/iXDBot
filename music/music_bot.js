@@ -107,7 +107,7 @@ class MusicBot {
     }
 
     getQueue(serverQueue) {        
-        let text = "```--- Current music queue\n ---";
+        let text = "```--- Current music queue ---\n";
         serverQueue.songs.forEach((song, index) => {
             if(index === 0){
                 text = text.concat("Currently playing: " + song.title + "\n");
