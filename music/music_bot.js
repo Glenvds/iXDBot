@@ -1,6 +1,7 @@
 const ytdl = require("ytdl-core-discord");
 const ytsr = require('ytsr');
-const radio = require('radio-stream');
+//const radio = require('radio-stream');
+var icecast = require('icecast');
 
 class MusicBot {
     constructor() {
@@ -138,11 +139,26 @@ class MusicBot {
         channel.send("`" + msg + "`");
     }
 
+    async playRadio(message) {
+        const voiceChannel = message.member.voice.channel;
+        const textChannel = message.channel;
+        const url = "http://dir.xiph.org/listen/2855908/listen.m3u";
 
-    async playRadio(message){
+
+
+
+        const connection = await voiceChannel.join();
+
+        icecast.get(url, (res) => {
+            const dispatcher = connection.play(res);
+        })
+    }
+
+
+    /*async playRadio(message){
         const voiceChannel = message.member.voice.channel;     
         const textChannel = message.channel;   
-        const stream = radio.createReadStream("http://icecast.vrtcdn.be/stubru-high.mp3");
+        const stream = radio.createReadStream("http://dir.xiph.org/listen/2855908/listen.m3u");
 
         
             const connection = await voiceChannel.join();
@@ -157,7 +173,7 @@ class MusicBot {
         stream.on("data", (chunck) => {
             console.log(typeof chunck);
             console.log(chunck);
-            const dispatcher = connection.play(chunck, { type: 'opus', highWaterMark: 50 })
+            const dispatcher = connection.play(chunck)
             .on("start", () => {this;this.sendMessageToChannel(textChannel, "Started playing radio");})
             .on("finish", () => {
                 console.log("ended radio")
@@ -169,7 +185,7 @@ class MusicBot {
                 console.log(error);
             });
         })
-    }
+    }*/
 
 
 
