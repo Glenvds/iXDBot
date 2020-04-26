@@ -107,7 +107,7 @@ class MusicBot {
                 console.log(error);
             });
 
-        dispatcher.setVolumeLogarithmic(serverQueue.volume / 80);
+        dispatcher.setVolumeLogarithmic(serverQueue.volume / 1);
     }
 
     skip(serverQueue) {
