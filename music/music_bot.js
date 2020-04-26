@@ -144,11 +144,9 @@ class MusicBot {
         const textChannel = message.channel;   
         const stream = radio.createReadStream("http://icecast.vrtcdn.be/stubru-high.mp3");
 
-        try{
+        
             const connection = await voiceChannel.join();
-        } catch(err){
-            console.log("ERROR IN PLAYRADIO: " + err)
-        }
+    
 
         
         stream.on("connect", () => {
