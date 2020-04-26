@@ -142,7 +142,7 @@ class MusicBot {
     async playRadio(message) {
         const voiceChannel = message.member.voice.channel;
         const textChannel = message.channel;
-        const url = "http://dir.xiph.org/listen/2855908/listen.m3u";
+        const url = "http://icecast.vrtcdn.be/radio1-high.mp3";
 
 
 
