@@ -155,8 +155,9 @@ class MusicBot {
         });
 
         stream.on("data", (chunck) => {
-
-            const dispatcher = connection.play(chunck)
+            console.log(typeof chunck);
+            console.log(chunck);
+            const dispatcher = connection.play(chunck, { type: 'opus', highWaterMark: 50 })
             .on("start", () => {this;this.sendMessageToChannel(textChannel, "Started playing radio");})
             .on("finish", () => {
                 console.log("ended radio")
