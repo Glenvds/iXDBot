@@ -73,7 +73,7 @@ class MusicBot {
 
             this.queue.set(message.guild.id, queueContruct);
             queueContruct.songs.push(song);
-            queueContruct.connection = this.setupVoiceConnection(voiceChannel);
+            queueContruct.connection = await this.setupVoiceConnection(voiceChannel);
             this.play(message.guild, queueContruct.songs[0]);
         }
         else {
