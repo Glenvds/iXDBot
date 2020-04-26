@@ -142,7 +142,7 @@ class MusicBot {
     async playRadio(message){
         const voiceChannel = message.member.voice.channel;     
         const textChannel = message.channel;   
-        const stream = radio.createRadioStream("http://icecast.vrtcdn.be/stubru-high.mp3");
+        const stream = radio.createReadStream("http://icecast.vrtcdn.be/stubru-high.mp3");
 
         try{
             const connection = await voiceChannel.join();
