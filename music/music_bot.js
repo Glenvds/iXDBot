@@ -27,9 +27,9 @@ class MusicBot {
 
 
 
-    setupVoiceConnection(voiceChannel){
+    async setupVoiceConnection(voiceChannel){
         try{
-            let connection = voiceChannel.join();
+            let connection = await voiceChannel.join();
             return connection;
         }
         catch(err){
